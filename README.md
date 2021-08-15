@@ -4,9 +4,9 @@ Zombie spawner that showing info on floating text and custom delay.
 
 ## USAGE
 - Command
-  - /Zspawn
+  - /zspawn
     - get command usage
-  - /Zspawn spawn <delay>
+  - /zspawn spawn <delay>
     - spawn a zombie spawner in your current position and world
   - /zspawn delete 
     - delete a zombie spawner using id (the id can be saw in floating text)
@@ -18,5 +18,5 @@ The zombie who was spawned from spawner will be showing the healthbar on the zom
 ## Support
 Discord Imao#9866
 
-##donate
+## Donate
 https://paypal.me/gohkai1
