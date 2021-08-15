@@ -25,7 +25,7 @@ class Main extends PluginBase implements Listener{
             "id" => []
         ));
         $this->getLogger()->info("Plugin Enabled");
-        $this->getLogger()->notice("Thank you for using Zspawn, support the developer https://paypal.me/gohkai1");
+        $this->getLogger()->notice("Thank you for using Zspawn, check the latest version from https://github.com/Xiaoming0313883/Zspawn");
         if(count($data->get("id")) >= 1){
             foreach($data->get("id") as $id=>$data){
                 $level = $this->getserver()->getlevelbyname($data["level"]);
