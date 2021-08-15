@@ -15,6 +15,7 @@ Zombie spawner that showing info on floating text and custom delay.
 The zombie who was spawned from spawner will be showing the healthbar on the zombie's nametag.
 ![ee](https://user-images.githubusercontent.com/85933240/129470293-88a189f4-efd3-4be3-8a1f-a46bb9005591.PNG)
   
-## Content
+## Support
 Discord Imao#9866
-Support https://paypal.me/gohkai1
+##donate
+https://paypal.me/gohkai1
