@@ -43,6 +43,20 @@ class spawn extends task {
             $text = "Zombie summon every $this->delay second\n$this->count left to spawn next zombie\nspawn id: $this->id";
             $this->particle->setText($text);
             $this->position->getLevel()->addParticle($this->particle);
+            if($entity->namedtag->hasTag("pass")){
+                $health = (int)$entity->gethealth();
+                $maxhealth = (int)$entity->getmaxhealth();
+                $currnohealth = $maxhealth - $health . "\n";
+                $namedtagtext = "Health";
+                for($i = 0;$i < (int)$health;$i++){
+                    $namedtagtext = $namedtagtext . "§2|";
+                }
+                for($a = 0;$a < (int)$currnohealth;$a++){
+                    $namedtagtext = $namedtagtext . "§4|";
+                }
+                $entity->setnametag($namedtagtext);
+                $entity->setNameTagAlwaysVisible(true);
+            }
         } else {
             $this->count = ($this->count - 1);
             $text = "Zombie summon every $this->delay second\n" . $this->count . " left to spawn next zombie\nspawn id: $this->id";
