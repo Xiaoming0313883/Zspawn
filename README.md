@@ -2,7 +2,7 @@
 A plugin for PocketMine-MP.
 Zombie spawner that showing info on floating text and custom delay.
 
-## USAGE
+## HOW TO USE
 - Command
   - /zspawn
     - get command usage
