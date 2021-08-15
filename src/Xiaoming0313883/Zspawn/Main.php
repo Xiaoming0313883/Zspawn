@@ -127,7 +127,6 @@ class Main extends PluginBase implements Listener{
             $health = (int)$e->getentity()->gethealth();
             $maxhealth = (int)$e->getentity()->getmaxhealth();
             $currnohealth = $maxhealth - $health . "\n";
-            echo $currnohealth;
             $namedtagtext = "Health";
             for($i = 0;$i < (int)$health;$i++){
                 $namedtagtext = $namedtagtext . "§2|";
@@ -136,6 +135,7 @@ class Main extends PluginBase implements Listener{
                 $namedtagtext = $namedtagtext . "§4|";
             }
             $e->getentity()->setnametag($namedtagtext);
+            $e->getentity()->setNameTagAlwaysVisible(true);
         }
     }
 
