@@ -1,0 +1,9 @@
+---
+name: Zspawn
+version: 0.0.1
+main: Xiaoming0313883\Zspawn\Main
+api: 3.22.0
+commands:
+  zspawn:
+    description: "spawn a zombie in your position"
+...
