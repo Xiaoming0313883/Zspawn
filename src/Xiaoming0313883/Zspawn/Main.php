@@ -24,8 +24,6 @@ class Main extends PluginBase implements Listener{
         $data = new Config($this->getdatafolder() . "data.yml",Config::YAML,array(
             "id" => []
         ));
-        $this->getLogger()->info("Plugin Enabled");
-        $this->getLogger()->notice("Thank you for using Zspawn, check the latest version from https://github.com/Xiaoming0313883/Zspawn");
         if(count($data->get("id")) >= 1){
             foreach($data->get("id") as $id=>$data){
                 $level = $this->getserver()->getlevelbyname($data["level"]);
