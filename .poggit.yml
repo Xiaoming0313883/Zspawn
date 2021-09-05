@@ -1,0 +1,8 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/Xiaoming0313883/Zspawn
+build-by-default: true
+branches:
+- main
+projects:
+  Zspawn:
+    path: ""
+...
