@@ -48,7 +48,7 @@ class spawn extends task {
                 $maxHealth = (int)$entity->getMaxHealth();
                 $currNoHealth = $maxHealth - $Health . "\n";
                 $namedTagText = "Health";
-                for($i = 0;$i < (int)$health;$i++){
+                for($i = 0;$i < (int)$Health;$i++){
                     $namedTagText = $namedTagText . "§2|";
                 }
                 for($a = 0;$a < (int)$currNoHealth;$a++){
