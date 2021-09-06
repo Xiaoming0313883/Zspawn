@@ -38,23 +38,23 @@ class spawn extends task {
             $nbt = Entity::createBaseNBT($this->position, null, 0, 0);
             $entity = Entity::createEntity("Zombie", $this->level, $nbt);
             $entity->spawnToAll();
-            $entity->namedtag->setstring("pass","true");
+            $entity->namedTag->setString("pass","true");
             $this->count = $this->delay;
             $text = "Zombie summon every $this->delay second\n$this->count left to spawn next zombie\nspawn id: $this->id";
             $this->particle->setText($text);
             $this->position->getLevel()->addParticle($this->particle);
-            if($entity->namedtag->hasTag("pass")){
-                $health = (int)$entity->gethealth();
-                $maxhealth = (int)$entity->getmaxhealth();
-                $currnohealth = $maxhealth - $health . "\n";
-                $namedtagtext = "Health";
+            if($entity->namedTag->hasTag("pass")){
+                $health = (int)$entity->getHealth();
+                $maxHealth = (int)$entity->getMaxHealth();
+                $currNoHealth = $maxHealth - $Health . "\n";
+                $namedTagText = "Health";
                 for($i = 0;$i < (int)$health;$i++){
-                    $namedtagtext = $namedtagtext . "§2|";
+                    $namedTagText = $namedTagText . "§2|";
                 }
-                for($a = 0;$a < (int)$currnohealth;$a++){
-                    $namedtagtext = $namedtagtext . "§4|";
+                for($a = 0;$a < (int)$currNoHealth;$a++){
+                    $namedTagText = $namedTagText . "§4|";
                 }
-                $entity->setnametag($namedtagtext);
+                $entity->setnametag($namedTagText);
                 $entity->setNameTagAlwaysVisible(true);
             }
         } else {
