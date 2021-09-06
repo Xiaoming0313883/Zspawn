@@ -108,7 +108,7 @@ class Main extends PluginBase implements Listener{
         $data = $this->data[$id];
         $taskId = $data["taskid"];
         $particle = $data["particle"];
-        $this->getScheduler()->cancelTask($taskid);
+        $this->getScheduler()->cancelTask($taskId);
         $particle->setInvisible();
         $data["level"]->addParticle($particle);
         $dataa = new Config($this->getDataFolder() . "data.yml",Config::YAML);
