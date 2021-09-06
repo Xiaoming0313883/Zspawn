@@ -27,7 +27,7 @@ class Main extends PluginBase implements Listener{
         if(count($data->get("id")) >= 1){
             foreach($data->get("id") as $id=>$data){
                 $level = $this->getserver()->getlevelbyname($data["level"]);
-                $this->spawnon($data["x"],$data["y"],$data["z"],$data["delay"],$level,$id);
+                $this->databasespawn($data["x"],$data["y"],$data["z"],$data["delay"],$level,$id);
             }
         }
     }
@@ -56,7 +56,7 @@ class Main extends PluginBase implements Listener{
                             if(count($args) >= 2){
                                 if(is_numeric($args[1])){
                                     if(isset($this->data["$args[1]"])){
-                                        $this->remove($args[1],$sender);
+                                        $this->removespawner($args[1],$sender);
                                         return true;
                                     } else {
                                         $sender->sendmessage("can't find id $args[1] spawner");
@@ -95,7 +95,7 @@ class Main extends PluginBase implements Listener{
         }
     }
     
-    private function spawnon($x,$y,$z,$delay,$level,$id){
+    private function databasespawn($x,$y,$z,$delay,$level,$id){
         $position = new Position($x,$y,$z,$level);
         $text = "Zombie summon every $delay second\n$delay left to spawn next zombie\nspawn id: $id";
         $particle = new FloatingTextParticle($position, $text);
@@ -104,7 +104,7 @@ class Main extends PluginBase implements Listener{
         $this->data[$id] = array("taskid" => $task->gettaskid(),"particle" => $particle,"level" => $level);
     }
 
-    private function remove($id,$player){
+    private function removespawner($id,$player){
         $data = $this->data[$id];
         $taskid = $data["taskid"];
         $particle = $data["particle"];
@@ -120,7 +120,7 @@ class Main extends PluginBase implements Listener{
         $player->sendmessage("successfully deleted");
     }
 
-    public function ondamage(EntityDamageEvent $e){
+    public function updatehealthbar(EntityDamageEvent $e){
         if($e->getentity()->namedtag->hasTag("pass")){
             $health = (int)$e->getentity()->gethealth();
             $maxhealth = (int)$e->getentity()->getmaxhealth();
