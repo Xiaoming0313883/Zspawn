@@ -44,7 +44,7 @@ class spawn extends task {
             $this->particle->setText($text);
             $this->position->getLevel()->addParticle($this->particle);
             if($entity->namedTag->hasTag("pass")){
-                $health = (int)$entity->getHealth();
+                $Health = (int)$entity->getHealth();
                 $maxHealth = (int)$entity->getMaxHealth();
                 $currNoHealth = $maxHealth - $Health . "\n";
                 $namedTagText = "Health";
