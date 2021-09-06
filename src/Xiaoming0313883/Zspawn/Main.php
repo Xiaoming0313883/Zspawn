@@ -21,12 +21,12 @@ class Main extends PluginBase implements Listener{
         $config = new Config($this->getdatafolder() . "setting.yml",Config::YAML,array(
             "showtext" => true
         ));
-        $data = new Config($this->getdatafolder() . "data.yml",Config::YAML,array(
+        $data = new Config($this->getDataFolder() . "data.yml",Config::YAML,array(
             "id" => []
         ));
         if(count($data->get("id")) >= 1){
             foreach($data->get("id") as $id=>$data){
-                $level = $this->getserver()->getlevelbyname($data["level"]);
+                $level = $this->getServer()->getLevelByName($data["level"]);
                 $this->databasespawn($data["x"],$data["y"],$data["z"],$data["delay"],$level,$id);
             }
         }
@@ -45,10 +45,10 @@ class Main extends PluginBase implements Listener{
                                     $this->spawn($x,$y,$z,$sender,(int)$args[1]);
                                     return true;
                                 } else {
-                                    $sender->sendmessage("delay must be a number");
+                                    $sender->sendMessage("delay must be a number");
                                 }
                             }
-                            $sender->sendmessage("Usage /zspawn spawn <delay(number)>");
+                            $sender->sendMessage("Usage /zspawn spawn <delay(number)>");
                             return true;
                         break;
 
@@ -59,25 +59,25 @@ class Main extends PluginBase implements Listener{
                                         $this->removespawner($args[1],$sender);
                                         return true;
                                     } else {
-                                        $sender->sendmessage("can't find id $args[1] spawner");
+                                        $sender->sendMessage("can't find id $args[1] spawner");
                                     }
                                 }
                             }
-                            $sender->sendmessage("usege /zspawn delete <id>");
+                            $sender->sendMessage("usege /zspawn delete <id>");
                             return true;
                         break;
                     }
                 }
-                $sender->sendmessage("Zspawn Help");
-                $sender->sendmessage("/zspawn spawn <delay>  ->>spawn zombie");
-                $sender->sendmessage("/zspawn delete <id>  ->>delete spawner");
+                $sender->sendMessage("Zspawn Help");
+                $sender->sendMessage("/zspawn spawn <delay>  ->>spawn zombie");
+                $sender->sendMessage("/zspawn delete <id>  ->>delete spawner");
             break;
         }
         return true;
     }
 
     private function spawn($x,$y,$z,$player,$delay){
-        $data = new Config($this->getdatafolder() . "data.yml",Config::YAML);
+        $data = new Config($this->getDataFolder() . "data.yml",Config::YAML);
         $id = $data->get("id");
         $ran = mt_rand(1,100);
         if(isset($id["$ran"])){
@@ -86,12 +86,12 @@ class Main extends PluginBase implements Listener{
             $id["$ran"] = array("x" => $x,"y" => $y,"z" => $z,"delay" => $delay,"level" => $player->getlevel()->getname());
             $data->set("id",$id);
             $data->save();
-            $player->sendmessage("summon successfully, the id is $ran");
+            $player->sendMessage("summon successfully, the id is $ran");
             $text = "Zombie summon every $delay second\n$delay left to spawn next zombie\nspawn id: $ran";
             $particle = new FloatingTextParticle($player->getPosition(), $text);
-            $player->getposition()->getLevel()->addParticle($particle);
+            $player->getPosition()->getLevel()->addParticle($particle);
             $task = $this->getScheduler()->schedulerepeatingTask(new spawn($this,$x,$y,$z,$ran,$particle,$delay,$player->getlevel(),$player->getposition()),20);
-            $this->data[$ran] = array("taskid" => $task->gettaskid(),"particle" => $particle,"level" => $player->getlevel());
+            $this->data[$ran] = array("taskid" => $task->getTaskId(),"particle" => $particle,"level" => $player->getLevel());
         }
     }
     
@@ -101,39 +101,39 @@ class Main extends PluginBase implements Listener{
         $particle = new FloatingTextParticle($position, $text);
         $level->addParticle($particle);
         $task = $this->getScheduler()->schedulerepeatingTask(new spawn($this,$x,$y,$z,$id,$particle,$delay,$level,$position),20);
-        $this->data[$id] = array("taskid" => $task->gettaskid(),"particle" => $particle,"level" => $level);
+        $this->data[$id] = array("taskid" => $task->getTaskId(),"particle" => $particle,"level" => $level);
     }
 
     private function removespawner($id,$player){
         $data = $this->data[$id];
-        $taskid = $data["taskid"];
+        $taskId = $data["taskid"];
         $particle = $data["particle"];
         $this->getScheduler()->cancelTask($taskid);
         $particle->setInvisible();
         $data["level"]->addParticle($particle);
-        $dataa = new Config($this->getdatafolder() . "data.yml",Config::YAML);
-        $dataid = $dataa->get("id");
-        unset($dataid[$id]);
-        $dataa->set("id",$dataid);
+        $dataa = new Config($this->getDataFolder() . "data.yml",Config::YAML);
+        $dataId = $dataa->get("id");
+        unset($dataId[$id]);
+        $dataa->set("id",$dataId);
         $dataa->save();
         unset($this->data[$id]);
-        $player->sendmessage("successfully deleted");
+        $player->sendMessage("successfully deleted");
     }
 
-    public function updatehealthbar(EntityDamageEvent $e){
-        if($e->getentity()->namedtag->hasTag("pass")){
-            $health = (int)$e->getentity()->gethealth();
-            $maxhealth = (int)$e->getentity()->getmaxhealth();
-            $currnohealth = $maxhealth - $health . "\n";
-            $namedtagtext = "Health";
+    public function updateHealthBar(EntityDamageEvent $e){
+        if($e->getEntity()->namedtag->hasTag("pass")){
+            $health = (int)$e->getEntity()->getHealth();
+            $maxHealth = (int)$e->getEntity()->getMaxHealth();
+            $currnohealth = $maxHealth - $health . "\n";
+            $namedTagText = "Health";
             for($i = 0;$i < (int)$health;$i++){
-                $namedtagtext = $namedtagtext . "§2|";
+                $namedTagText = $namedTagText . "§2|";
             }
             for($a = 0;$a < (int)$currnohealth;$a++){
-                $namedtagtext = $namedtagtext . "§4|";
+                $namedTagText = $namedTagText . "§4|";
             }
-            $e->getentity()->setnametag($namedtagtext);
-            $e->getentity()->setNameTagAlwaysVisible(true);
+            $e->getEntity()->setNameTag($namedtagtext);
+            $e->getEntity()->setNameTagAlwaysVisible(true);
         }
     }
 
