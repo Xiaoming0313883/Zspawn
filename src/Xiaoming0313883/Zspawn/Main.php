@@ -121,7 +121,7 @@ class Main extends PluginBase implements Listener{
     }
 
     public function updateHealthBar(EntityDamageEvent $e){
-        if($e->getEntity()->namedTag->hasTag("pass")){
+        if($e->getEntity()->namedtag->hasTag("pass")){
             $health = (int)$e->getEntity()->getHealth();
             $maxHealth = (int)$e->getEntity()->getMaxHealth();
             $currNoHealth = $maxHealth - $health . "\n";
