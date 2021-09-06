@@ -121,18 +121,18 @@ class Main extends PluginBase implements Listener{
     }
 
     public function updateHealthBar(EntityDamageEvent $e){
-        if($e->getEntity()->namedtag->hasTag("pass")){
+        if($e->getEntity()->namedTag->hasTag("pass")){
             $health = (int)$e->getEntity()->getHealth();
             $maxHealth = (int)$e->getEntity()->getMaxHealth();
-            $currnohealth = $maxHealth - $health . "\n";
+            $currNoHealth = $maxHealth - $health . "\n";
             $namedTagText = "Health";
             for($i = 0;$i < (int)$health;$i++){
                 $namedTagText = $namedTagText . "§2|";
             }
-            for($a = 0;$a < (int)$currnohealth;$a++){
+            for($a = 0;$a < (int)$currNoHealth;$a++){
                 $namedTagText = $namedTagText . "§4|";
             }
-            $e->getEntity()->setNameTag($namedtagtext);
+            $e->getEntity()->setNameTag($namedTagText);
             $e->getEntity()->setNameTagAlwaysVisible(true);
         }
     }
