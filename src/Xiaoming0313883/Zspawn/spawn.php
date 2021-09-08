@@ -19,8 +19,10 @@ class spawn extends task {
     private $level;	
     private $position;
     private $count;
+    private $mobid;
+    private $mobname;
 
-    public function __construct($plugin,$x,$y,$z,$id,$particle,$delay,$level,$position){
+    public function __construct($plugin,$x,$y,$z,$id,$particle,$delay,$level,$position,$mobid){
         $this->plugin = $plugin;	
 		$this->x = $x;	
 		$this->y = $y;	
@@ -31,35 +33,37 @@ class spawn extends task {
         $this->level = $level;	
         $this->position = $position;
         $this->count = $delay;
+        $this->mobid = $mobid;
+        $this->mobname = getid::getname($mobid);
     }
 
     public function onRun($tick){
         if($this->count == "0"){
             $nbt = Entity::createBaseNBT($this->position, null, 0, 0);
-            $entity = Entity::createEntity("Zombie", $this->level, $nbt);
+            $entity = Entity::createEntity($this->mobid, $this->level, $nbt);
             $entity->spawnToAll();
-            $entity->namedTag->setString("pass","true");
+            $entity->namedtag->setstring("pass","true");
             $this->count = $this->delay;
-            $text = "Zombie summon every $this->delay second\n$this->count left to spawn next zombie\nspawn id: $this->id";
+            $text = "$this->mobname summon every $this->delay second\n$this->count left to spawn next $this->mobname\nspawn id: $this->id";
             $this->particle->setText($text);
             $this->position->getLevel()->addParticle($this->particle);
-            if($entity->namedTag->hasTag("pass")){
-                $Health = (int)$entity->getHealth();
-                $maxHealth = (int)$entity->getMaxHealth();
-                $currNoHealth = $maxHealth - $Health . "\n";
-                $namedTagText = "Health";
-                for($i = 0;$i < (int)$Health;$i++){
-                    $namedTagText = $namedTagText . "§2|";
+            if($entity->namedtag->hasTag("pass")){
+                $health = (int)$entity->gethealth();
+                $maxhealth = (int)$entity->getmaxhealth();
+                $currnohealth = $maxhealth - $health . "\n";
+                $namedtagtext = "Health";
+                for($i = 0;$i < (int)$health;$i++){
+                    $namedtagtext = $namedtagtext . "§2|";
                 }
-                for($a = 0;$a < (int)$currNoHealth;$a++){
-                    $namedTagText = $namedTagText . "§4|";
+                for($a = 0;$a < (int)$currnohealth;$a++){
+                    $namedtagtext = $namedtagtext . "§4|";
                 }
-                $entity->setnametag($namedTagText);
+                $entity->setnametag($namedtagtext);
                 $entity->setNameTagAlwaysVisible(true);
             }
         } else {
             $this->count = ($this->count - 1);
-            $text = "Zombie summon every $this->delay second\n" . $this->count . " left to spawn next zombie\nspawn id: $this->id";
+            $text = "$this->mobname summon every $this->delay second\n" . $this->count . " left to spawn next $this->mobname\nspawn id: $this->id";
             $this->particle->setText($text);
             $this->position->getLevel()->addParticle($this->particle);
         }
