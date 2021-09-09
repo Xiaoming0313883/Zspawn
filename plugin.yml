@@ -6,9 +6,9 @@ api: 3.22.0
 commands:
   zspawn:
     description: "spawn a zombie in your position"
-    permission: Zspawn.zspawn.command
+    permission: zspawn.zspawn.command
  permissions:
-  Zspawn.zspawn.command:
-    description: "op run zspawn command"
+  zspawn.zspawn.command:
+    description: "Allows op run command"
     default: true
 ...
