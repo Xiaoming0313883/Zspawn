@@ -7,7 +7,8 @@ commands:
   zspawn:
     description: "spawn a zombie in your position"
     permission: Zspawn.zspawn.command
- Zspawn.zspawn.command:
-  description: "op run zspawn command"
-  default: true
+ permissions:
+  Zspawn.zspawn.command:
+    description: "op run zspawn command"
+    default: true
 ...
