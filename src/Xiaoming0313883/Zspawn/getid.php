@@ -79,7 +79,6 @@ class getid {
 
     public static function getname($id){
         $array_s = array_search($id,self::$mob_id);
-        echo $array_s;
         return $array_s;
     }
     
