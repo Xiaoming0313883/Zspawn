@@ -1,6 +1,6 @@
 ---
 name: Zspawn
-version: 5.1.0
+version: 5.1.1
 main: Xiaoming0313883\Zspawn\Main
 api: 3.22.0
 commands:
