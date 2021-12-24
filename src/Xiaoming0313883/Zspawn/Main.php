@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Xiaoming0313883\Zspawn;
 
+use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use pocketmine\command\Command;
@@ -37,6 +38,10 @@ class Main extends PluginBase implements Listener{
         }
     }
     public function onCommand(CommandSender $sender, Command $cmd, String $Label, Array $args) : bool{
+        if(!($sender instanceof Player)){
+            $sender->sendMessage("USE IT IN GAME!");
+            return true;
+        }
         switch($cmd->getname()){
             case "zspawn":
                 if(count($args) >= 1){
@@ -70,8 +75,6 @@ class Main extends PluginBase implements Listener{
                             }
                             $sender->sendmessage("Usage /zspawn spawn <delay(number)>");
                             return true;
-                        break;
-
                         case "delete":
                             if(count($args) >= 2){
                                 if(is_numeric($args[1])){
@@ -85,7 +88,6 @@ class Main extends PluginBase implements Listener{
                             }
                             $sender->sendmessage("usege /zspawn delete <id>");
                             return true;
-                        break;
 
                         case "list":
                             $list = getid::$mob_id;
@@ -95,11 +97,27 @@ class Main extends PluginBase implements Listener{
                             }
                             $sender->sendMessage("END");
                             break;
+
+                        case "list-id":
+                            if(file_exists($this->getDataFolder() . "data.yml")) {
+                                $data = new Config($this->getDataFolder() . "data.yml",Config::YAML);
+                                $sender->sendMessage("§e---------------------START---------------------");
+                                foreach ($data->get("id") as $id=>$value){
+                                    $sender->sendMessage("ID:$id  Position: X=".$value["x"]." Y=".$value["y"]." Z=".$value["z"] . " World:".$value["level"] . " Type:" . getid::getname($value["mob_id"]));
+                                }
+                                $sender->sendMessage("§e---------------------END---------------------");
+                                return true;
+                            } else {
+                                $sender->sendMessage("§4You haven't create a spawner yet!");
+                                return true;
+                            }
+                            break;
                     }
                 }
                 $sender->sendmessage("Zspawn Help");
                 $sender->sendmessage("/zspawn spawn <mob's id | name> <delay>  -> spawn spawner");
                 $sender->sendmessage("/zspawn delete <id>  -> delete spawner");
+                $sender->sendmessage("/zspawn list-id -> list all spawner");
             break;
         }
         return true;
@@ -117,31 +135,22 @@ class Main extends PluginBase implements Listener{
             $data->set("id",$id);
             $data->save();
             $player->sendmessage("summon successfully, the id is $ran");
-            $text = "$mobname summon every $delay second\n$delay left to spawn next $mobname\nspawn id: $ran";
-            $particle = new FloatingTextParticle($player->getPosition(), $text);
-            $player->getposition()->getLevel()->addParticle($particle);
-            $task = $this->getScheduler()->schedulerepeatingTask(new spawn($this,$x,$y,$z,$ran,$particle,$delay,$player->getlevel(),$player->getposition(),$mob_id),20);
-            $this->data[$ran] = array("taskid" => $task->gettaskid(),"particle" => $particle,"level" => $player->getlevel());
+            $task = $this->getScheduler()->schedulerepeatingTask(new spawn($delay,$player->getlevel(),$player->getposition(),$mob_id),20);
+            $this->data[$ran] = array("taskid" => $task->gettaskid(),"level" => $player->getlevel());
         }
     }
     
     private function spawnon($x,$y,$z,$delay,$level,$id,$mobid){
         $mob_name = getid::getname($mobid);
         $position = new Position($x,$y,$z,$level);
-        $text = "$mob_name summon every $delay second\n$delay left to spawn next $mob_name\nspawn id: $id";
-        $particle = new FloatingTextParticle($position, $text);
-        $level->addParticle($particle);
-        $task = $this->getScheduler()->schedulerepeatingTask(new spawn($this,$x,$y,$z,$id,$particle,$delay,$level,$position,$mobid),20);
-        $this->data[$id] = array("taskid" => $task->gettaskid(),"particle" => $particle,"level" => $level);
+        $task = $this->getScheduler()->schedulerepeatingTask(new spawn($delay,$level,$position,$mobid),20);
+        $this->data[$id] = array("taskid" => $task->gettaskid(),"level" => $level);
     }
 
     private function remove($id,$player){
         $data = $this->data[$id];
         $taskid = $data["taskid"];
-        $particle = $data["particle"];
         $this->getScheduler()->cancelTask($taskid);
-        $particle->setInvisible();
-        $data["level"]->addParticle($particle);
         $dataa = new Config($this->getdatafolder() . "data.yml",Config::YAML);
         $dataid = $dataa->get("id");
         unset($dataid[$id]);
@@ -153,16 +162,9 @@ class Main extends PluginBase implements Listener{
 
     public function ondamage(EntityDamageEvent $e){
         if($e->getentity()->namedtag->hasTag("pass")){
-            $health = (int)$e->getentity()->gethealth();
+            $health = (int)$e->getentity()->gethealth() - $e->getFinalDamage();
             $maxhealth = (int)$e->getentity()->getmaxhealth();
-            $currnohealth = $maxhealth - $health . "\n";
-            $namedtagtext = "Health";
-            for($i = 0;$i < (int)$health;$i++){
-                $namedtagtext = $namedtagtext . "§2|";
-            }
-            for($a = 0;$a < (int)$currnohealth;$a++){
-                $namedtagtext = $namedtagtext . "§4|";
-            }
+            $namedtagtext = "Health\n($health/$maxhealth)";
             $e->getentity()->setnametag($namedtagtext);
             $e->getentity()->setNameTagAlwaysVisible(true);
         }

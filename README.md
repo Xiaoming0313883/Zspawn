@@ -10,6 +10,8 @@ Zombie spawner that showing info on floating text and custom delay.
     - spawn a entity spawner in your current position and world
   - /zspawn list
     - list all avaliable to spawn entity's id and name
+  - /zspawn list-id
+    - list all spawner
   - /zspawn delete 
     - delete a spawner using id (the id can be saw in floating text)
 
@@ -68,7 +70,10 @@ Zombie spawner that showing info on floating text and custom delay.
   
 ## HEALTH BAR
 The entity who was spawned from spawner will be showing the healthbar on the their's nametag.
-![ee](https://user-images.githubusercontent.com/85933240/129470293-88a189f4-efd3-4be3-8a1f-a46bb9005591.PNG)
+![](img_1.png)
+
+## LIST-ID
+![](image/img-1.png)
   
 ## Support
 Discord Imao#9866

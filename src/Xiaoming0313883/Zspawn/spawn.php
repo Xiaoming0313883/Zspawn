@@ -9,32 +9,18 @@ use pocketmine\scheduler\Task as task;
 use pocketmine\nbt\tag\StringTag;
 
 class spawn extends task {
-    private $plugin;	
-	private $x;	
-	private $y;	
-	private $z;	
-	private $id;	
-	private $particle;	
 	private $delay;
     private $level;	
     private $position;
     private $count;
     private $mobid;
-    private $mobname;
 
-    public function __construct($plugin,$x,$y,$z,$id,$particle,$delay,$level,$position,$mobid){
-        $this->plugin = $plugin;	
-		$this->x = $x;	
-		$this->y = $y;	
-		$this->z = $z;	
-		$this->id = $id;	
-		$this->particle = $particle;	
+    public function __construct($delay,$level,$position,$mobid){
 		$this->delay = $delay;
         $this->level = $level;	
         $this->position = $position;
         $this->count = $delay;
         $this->mobid = $mobid;
-        $this->mobname = getid::getname($mobid);
     }
 
     public function onRun($tick){
@@ -44,28 +30,16 @@ class spawn extends task {
             $entity->spawnToAll();
             $entity->namedtag->setstring("pass","true");
             $this->count = $this->delay;
-            $text = "$this->mobname summon every $this->delay second\n$this->count left to spawn next $this->mobname\nspawn id: $this->id";
-            $this->particle->setText($text);
-            $this->position->getLevel()->addParticle($this->particle);
             if($entity->namedtag->hasTag("pass")){
                 $health = (int)$entity->gethealth();
                 $maxhealth = (int)$entity->getmaxhealth();
                 $currnohealth = $maxhealth - $health . "\n";
-                $namedtagtext = "Health";
-                for($i = 0;$i < (int)$health;$i++){
-                    $namedtagtext = $namedtagtext . "§2|";
-                }
-                for($a = 0;$a < (int)$currnohealth;$a++){
-                    $namedtagtext = $namedtagtext . "§4|";
-                }
+                $namedtagtext = "Health\n($health/$maxhealth)";
                 $entity->setnametag($namedtagtext);
                 $entity->setNameTagAlwaysVisible(true);
             }
         } else {
             $this->count = ($this->count - 1);
-            $text = "$this->mobname summon every $this->delay second\n" . $this->count . " left to spawn next $this->mobname\nspawn id: $this->id";
-            $this->particle->setText($text);
-            $this->position->getLevel()->addParticle($this->particle);
         }
     }
 }
