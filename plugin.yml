@@ -2,7 +2,7 @@
 name: Zspawn
 version: 5.1.1
 main: Xiaoming0313883\Zspawn\Main
-api: 3.22.0
+api: 5.0.0
 commands:
   zspawn:
     description: "spawn a zombie in your position"
@@ -11,4 +11,3 @@ permissions:
   zspawn.op.command:
     description: "command that just for op"
     default: op
-...
